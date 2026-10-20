@@ -1,0 +1,621 @@
+/* Motion, responsive layouts, print and final legibility overrides. */
+@keyframes flow {
+  to {
+    stroke-dashoffset:-28
+  }
+}
+.world-scene .flow-active {
+  animation:flow 2.6s linear infinite
+}
+.world-scene .scene-node {
+  transition:opacity .2s
+}
+.world-scene .scene-node:hover {
+  opacity:.82
+}
+@media(min-width:1700px) {
+  main {
+    padding:33px 46px 0
+  }
+  .workspace {
+    grid-template-columns:minmax(0,1fr) 325px
+  }
+  .stat {
+    padding:19px 22px
+  }
+  .stat-value {
+    font-size:35px
+  }
+  .stat-label {
+    font-size:10px
+  }
+  .stat-foot {
+    font-size:10px
+  }
+  .panel {
+    padding:26px
+  }
+  .scene-panel {
+    padding-bottom:0
+  }
+  .decision-heading,.control-section {
+    padding-left:24px;
+    padding-right:24px
+  }
+  .control-section p,.control-section label {
+    font-size:11px
+  }
+  .transport-buttons button {
+    font-size:12px
+  }
+}
+@media(max-width:1200px) {
+  .rail {
+    width:76px;
+    padding-inline:3px
+  }
+  .app-shell {
+    margin-left:76px
+  }
+  .rail-link.active:before {
+    left:-3px
+  }
+  .topbar {
+    padding-inline:24px
+  }
+  main {
+    padding:25px 24px 0
+  }
+  .workspace {
+    grid-template-columns:minmax(0,1fr) 265px;
+    gap:16px
+  }
+  .stat {
+    padding:14px 12px
+  }
+  .stat-label {
+    font-size:7px;
+    letter-spacing:.35px
+  }
+  .stat-label>small {
+    display:none
+  }
+  .stat-value {
+    font-size:25px
+  }
+  .stat-foot {
+    font-size:8px
+  }
+  .transport {
+    gap:12px
+  }
+  .time-display {
+    min-width:142px
+  }
+  .time-display p {
+    font-size:10px
+  }
+  .transport-buttons button {
+    font-size:9px;
+    padding:8px
+  }
+  .time-track {
+    max-width:150px
+  }
+  .scene-footer>small {
+    margin-left:0;
+    flex-basis:100%
+  }
+  .panel {
+    padding:18px
+  }
+  .scene-panel {
+    padding-bottom:0
+  }
+  .world-scene {
+    min-height:250px
+  }
+  .decision-heading {
+    padding:19px 17px 14px
+  }
+  .control-section {
+    padding:17px
+  }
+  .decision-heading h2 {
+    font-size:20px
+  }
+  .metrics {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  .panel-heading h2 {
+    font-size:21px
+  }
+  .plots {
+    gap:12px
+  }
+  .plots figcaption {
+    font-size:10px
+  }
+}
+@media(max-width:1000px) {
+  .workspace {
+    grid-template-columns:minmax(0,1fr) 250px
+  }
+  .telemetry {
+    grid-template-columns:repeat(5,minmax(0,1fr))
+  }
+  .stat-label {
+    white-space:normal;
+    line-height:1.4;
+    min-height:20px
+  }
+  .stat-value {
+    font-size:22px
+  }
+  .stat-value small {
+    font-size:8px
+  }
+  .stat-foot {
+    font-size:8px;
+    line-height:1.4
+  }
+  .transport {
+    flex-wrap:wrap;
+    gap:10px
+  }
+  .time-track {
+    flex:1;
+    max-width:none
+  }
+  .transport-buttons {
+    margin-left:auto
+  }
+  .plots {
+    grid-template-columns:1fr
+  }
+  .export-cards {
+    grid-template-columns:1fr
+  }
+  .page-heading h1 {
+    font-size:38px
+  }
+  .heading-description {
+    font-size:11px
+  }
+  .level {
+    width:210px
+  }
+  .context-strip,.context-strip>a {
+    font-size:9px
+  }
+  .world-scene {
+    min-height:200px
+  }
+  .pill {
+    font-size:7px
+  }
+  .panel-heading {
+    gap:7px
+  }
+  .panel-heading h2 {
+    font-size:19px
+  }
+}
+@media(max-width:760px) {
+  .rail {
+    inset:auto 0 0;
+    width:100%;
+    height:65px;
+    padding:5px 7px;
+    flex-direction:row;
+    justify-content:space-around;
+    gap:0;
+    border-top:1px solid #38505a
+  }
+  .brand-mark,.rail-rule,.rail-bottom {
+    display:none
+  }
+  .rail-link {
+    min-height:52px;
+    width:63px;
+    gap:3px;
+    padding:4px
+  }
+  .rail-link>span:first-child {
+    font-size:21px
+  }
+  .rail-link small {
+    font-size:8px
+  }
+  .rail-link.active:before {
+    display:none
+  }
+  .research-link {
+    margin:0
+  }
+  .activity-dot {
+    right:15px;
+    top:3px
+  }
+  .app-shell {
+    margin-left:0;
+    padding-bottom:65px
+  }
+  .topbar {
+    height:56px;
+    padding-inline:18px
+  }
+  .wordmark {
+    font-size:13px;
+    letter-spacing:2px
+  }
+  .wordmark>span {
+    margin-inline:10px
+  }
+  .wordmark small {
+    font-size:12px
+  }
+  .topbar-right {
+    gap:10px
+  }
+  .topbar-right>a {
+    display:none
+  }
+  .model-badge {
+    font-size:7px;
+    padding:3px 6px
+  }
+  main {
+    padding:22px 17px 0
+  }
+  .page-heading {
+    align-items:start;
+    gap:14px;
+    margin-bottom:18px
+  }
+  .page-heading h1 {
+    font-size:34px
+  }
+  .page-heading h1 em {
+    font-size:28px;
+    margin-inline:3px
+  }
+  .eyebrow {
+    font-size:7px;
+    letter-spacing:1px
+  }
+  .heading-description {
+    font-size:10px;
+    max-width:240px
+  }
+  .level {
+    width:158px;
+    flex-shrink:0
+  }
+  .level>span {
+    font-size:8px
+  }
+  .level select {
+    font-size:10px;
+    min-height:35px;
+    padding:7px
+  }
+  .context-strip {
+    flex-wrap:wrap;
+    gap:5px;
+    padding-block:9px
+  }
+  .telemetry {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    margin:17px 0
+  }
+  .stat {
+    padding:13px 12px
+  }
+  .stat:nth-child(3) {
+    border-right:0
+  }
+  .stat:nth-child(n+4) {
+    border-top:1px solid var(--line)
+  }
+  .stat:last-child {
+    grid-column:span 2
+  }
+  .stat-label {
+    font-size:7px;
+    min-height:0;
+    gap:4px
+  }
+  .stat-value {
+    font-size:26px;
+    margin-top:7px
+  }
+  .stat-value small {
+    font-size:9px
+  }
+  .stat-foot {
+    font-size:8px;
+    margin-top:6px
+  }
+  .transport {
+    margin-bottom:17px;
+    gap:10px
+  }
+  .time-display {
+    min-width:150px
+  }
+  .transport-buttons {
+    width:100%;
+    margin:0;
+    gap:6px;
+    justify-content:space-between
+  }
+  .transport-buttons button {
+    font-size:10px
+  }
+  .time-track {
+    max-width:none
+  }
+  .speed-label select {
+    font-size:9px;
+    width:69px
+  }
+  .workspace {
+    display:flex;
+    flex-direction:column;
+    gap:16px
+  }
+  .main-canvas {
+    width:100%;
+    order:2
+  }
+  .decision-panel {
+    position:static;
+    width:100%;
+    order:1
+  }
+  .decision-heading {
+    padding:14px 17px 10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px
+  }
+  .decision-heading .eyebrow {
+    margin:0
+  }
+  .decision-heading h2 {
+    font-size:20px
+  }
+  .control-section {
+    padding:16px 17px
+  }
+  .control-section label,.control-section>p {
+    font-size:11px
+  }
+  .control-section input,.control-section select {
+    min-height:40px
+  }
+  .decision-footer {
+    display:none
+  }
+  .control-callout {
+    padding:9px;
+    margin-top:12px
+  }
+  .control-callout p {
+    font-size:10px
+  }
+  .input-hint,.alignment-scale {
+    font-size:9px
+  }
+  .wide {
+    font-size:12px;
+    min-height:41px
+  }
+  .panel {
+    padding:18px;
+    margin-bottom:15px
+  }
+  .scene-panel {
+    padding-bottom:0
+  }
+  .panel-heading h2 {
+    font-size:22px
+  }
+  .pill {
+    font-size:8px
+  }
+  .scene-footer {
+    gap:10px;
+    font-size:8px
+  }
+  .scene-footer>small {
+    font-size:7px
+  }
+  .world-scene {
+    min-height:0;
+    margin-inline:-10px
+  }
+  .plots {
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px
+  }
+  .plots figure {
+    padding:8px 3px 3px
+  }
+  .plots figcaption {
+    font-size:10px;
+    padding:0 5px 4px
+  }
+  .metrics {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:15px 8px
+  }
+  dt {
+    font-size:8px
+  }
+  dd {
+    font-size:14px
+  }
+  .control-tabs button {
+    font-size:11px
+  }
+  .run-meta {
+    font-size:8px
+  }
+  .status-line p {
+    font-size:10px
+  }
+  .export-cards {
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:8px
+  }
+  .export-cards>button {
+    padding:11px
+  }
+  .export-cards strong {
+    font-size:10px
+  }
+  .export-cards small {
+    font-size:9px
+  }
+  footer {
+    font-size:8px;
+    line-height:1.6
+  }
+  .footer-separator {
+    margin-inline:5px
+  }
+}
+@media(max-width:440px) {
+  .page-heading {
+    flex-wrap:wrap;
+    gap:15px
+  }
+  .level {
+    width:100%;
+    display:flex;
+    align-items:center;
+    gap:12px
+  }
+  .level select {
+    margin:0;
+    flex:1
+  }
+  .level>span {
+    font-size:8px
+  }
+  .heading-description {
+    max-width:none
+  }
+  .stat {
+    padding:11px 9px
+  }
+  .stat-value {
+    font-size:23px
+  }
+  .stat-label {
+    font-size:6.5px
+  }
+  .stat-symbol {
+    font-size:12px
+  }
+  .transport-buttons {
+    gap:4px
+  }
+  .transport-buttons button {
+    font-size:9px;
+    padding:7px
+  }
+  .transport-buttons .icon-button {
+    min-width:30px
+  }
+  .speed-label {
+    margin:0
+  }
+  .speed-label select {
+    width:62px;
+    padding:7px 3px
+  }
+  .time-display p {
+    font-size:11px
+  }
+  .plots {
+    grid-template-columns:1fr
+  }
+  .metrics {
+    grid-template-columns:repeat(2,minmax(0,1fr))
+  }
+  .panel-heading h2 {
+    font-size:21px
+  }
+  .plot-key {
+    font-size:8px
+  }
+  .export-cards {
+    grid-template-columns:1fr
+  }
+  .scene-footer,.scene-footer>small {
+    font-size:7px
+  }
+  footer {
+    flex-direction:column;
+    gap:5px
+  }
+}
+@media(prefers-reduced-motion:reduce) {
+  *,*::before,*::after {
+    animation:none!important;
+    transition:none!important;
+    scroll-behavior:auto!important
+  }
+}
+@media print {
+  .rail,.topbar,.decision-panel,.transport,.context-strip,.status-line,button,input[type=file],.skip {
+    display:none!important
+  }
+  .app-shell {
+    margin:0
+  }
+  main {
+    padding:0
+  }
+  .workspace {
+    display:block
+  }
+  .panel,.telemetry {
+    break-inside:avoid
+  }
+  body {
+    background:white
+  }
+  .plots {
+    grid-template-columns:1fr 1fr
+  }
+}
+/* Keep small controls and reading labels legible on the paper background. */
+.stat-label {
+  font-size:9px
+}
+.stat-foot {
+  font-size:10px
+}
+.control-section label {
+  font-size:11px
+}
+.control-section p {
+  font-size:11px
+}
+.draft-state {
+  font-size:10px
+}
+.timeline-labels {
+  font-size:8px
+}
+.input-hint,.alignment-scale {
+  color:#65715f
+}
+.world-scene {
+  min-width:0
+}

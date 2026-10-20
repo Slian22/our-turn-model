@@ -1,0 +1,91 @@
+{
+  "algorithm": "sha256(path + NUL + bytes + NUL), sorted paths",
+  "spatialVersion": "0.2.5",
+  "digest": "118bb75d2c0fecad66c9ad057e108e3439ae937252229cace6eb8c27afc3302a",
+  "files": [
+    {
+      "path": "sim/capability.mjs",
+      "sha256": "bd6d97858a18f1c539c6df5ed7bd97c81917a281259d98fefa2d719215d1d27e"
+    },
+    {
+      "path": "sim/checkpoint-validation.mjs",
+      "sha256": "339244074f9a7db3b01e85b9528ff837739d6d260206627b281399775351b5cd"
+    },
+    {
+      "path": "sim/config.mjs",
+      "sha256": "45421fb3bd7095ee4e25ab3c3131754abe637fd818d77bb1c43dc7231795c9e1"
+    },
+    {
+      "path": "sim/dynamics.mjs",
+      "sha256": "05f7eaac8d2cd08f459608ae3a93c5652aa2c468e3c7313f940be22ddcb7fea9"
+    },
+    {
+      "path": "sim/engine.mjs",
+      "sha256": "c60b2de9e3bde807c315f6ba5baab9288308b73d3c560880ecd378722ff5caa6"
+    },
+    {
+      "path": "sim/experiments.mjs",
+      "sha256": "5e7713f5a0972f1700e378a1741e72638e3748bc00f30b6361464f8b5c71b73b"
+    },
+    {
+      "path": "sim/history.mjs",
+      "sha256": "8812d8f01dbc70f970d61ba1ab1906f342f77ad4b2cf336f34f80fc82f9ab892"
+    },
+    {
+      "path": "sim/infrastructure.mjs",
+      "sha256": "c5e64f3d514f7184646792b6700000b11d65d8af8683a2df103b1529c2c4cb97"
+    },
+    {
+      "path": "sim/policies.mjs",
+      "sha256": "059f59f33d3833afaf90ad8feae139306d7f78d991737af16ae1ad30aabd7abf"
+    },
+    {
+      "path": "sim/policy-funding.mjs",
+      "sha256": "65be3998724e3027ecb14fa98d98d9bf57605c661556226d46f5246a50d7cd33"
+    },
+    {
+      "path": "sim/resources.mjs",
+      "sha256": "3711c4bb940f394bcf563cd396f127f50f6d7e08b91532848e24568cc9ad8e8c"
+    },
+    {
+      "path": "sim/rng.mjs",
+      "sha256": "05dc8e15dc669d0a4f5e198022777d08c0f3f152cce270a055aa7ecc16d02c3d"
+    },
+    {
+      "path": "sim/version.mjs",
+      "sha256": "bdaabe553dc2fde2c7a77ffbd62fa5f9e3f614cd2d65964a3a7bd6fe12470877"
+    },
+    {
+      "path": "spatial/allocation.mjs",
+      "sha256": "2f13c803347178f04ca828cd44c816813b11e33c6445ec5de520f424585b6cd2"
+    },
+    {
+      "path": "spatial/checkpoint.mjs",
+      "sha256": "e863acc0e9a5d814bd99c1b2e1133029f0fd32d8f9e27801a6d02892ba52f238"
+    },
+    {
+      "path": "spatial/config.mjs",
+      "sha256": "857825e1f1554c31f5b802a72253051714210089329f48fb9f10fe34fce5065c"
+    },
+    {
+      "path": "spatial/events.mjs",
+      "sha256": "7e7b18d4365f02d01f2fa5105637949a10c8a2f97bf1241308fc93375b2886c9"
+    },
+    {
+      "path": "spatial/grid.mjs",
+      "sha256": "18b79ea274f1fda6a87bae5ddd80a29fdb6ce0e1b62ebd97a6ed36490e510d49"
+    },
+    {
+      "path": "spatial/local.mjs",
+      "sha256": "a44c9e0c356c1c4f05d56e52502871c940c5d3c6daa74ac879a7a94f52396e85"
+    },
+    {
+      "path": "spatial/observe.mjs",
+      "sha256": "817898fd99b2b8ecff82d7faf639b2d1b46da140614f3c205aad9f2277f0a7e1"
+    },
+    {
+      "path": "spatial/world.mjs",
+      "sha256": "563dc75fdbf42f801e3e88ec7cea6b0941a3a14a98f780a758ddbd39db1e8f58"
+    }
+  ]
+}

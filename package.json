@@ -1,0 +1,17 @@
+{
+  "name": "our-turn-model",
+  "version": "1.0.0",
+  "description": "Coupled Human-AI Resource Dynamics & Coevolution Simulator",
+  "type": "module",
+  "scripts": {
+    "test": "npm run test:revised && npm run test:spatial && npm run test:console",
+    "test:revised": "node --test revised-tests/*.test.mjs",
+    "test:spatial": "node --test spatial-tests/*.test.mjs",
+    "test:console": "node --test console/*.test.mjs",
+    "serve": "python3 -m http.server 8000"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "license": "MIT"
+}

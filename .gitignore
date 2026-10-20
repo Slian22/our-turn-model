@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Environments & Packages
+.venv/
+venv/
+ENV/
+env/
+node_modules/
+*.egg-info/
+*.egg
+build/
+dist/
+
+# Experimental data and run results (Strictly excluded)
+output/
+results/
+results_quick/
+data/
+runs/
+*.csv
+*.jsonl
+*.parquet
+*.h5
+*.npy
+*.npz
+
+# Logs and runtime artifacts
+*.log
+*.tmp
+*.pdf
+!figure/*.pdf
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes

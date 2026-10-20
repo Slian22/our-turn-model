@@ -1,0 +1,132 @@
+{
+  "historical": {
+    "modern_kcal_day": 4500.0,
+    "neanderthal_extra_kcal_day": 250.0,
+    "recruitment_energy_years": 20.0,
+    "mortality_per_year": 0.025,
+    "starvation_mortality_per_year": 0.1,
+    "intake_max": 1.7,
+    "resource_half_saturation": 0.002,
+    "resource_loss_per_year": 12.0,
+    "resident_neanderthals": 1.0,
+    "arriving_moderns": 0.01,
+    "disappearance_threshold": 0.001
+  },
+  "rsi": {
+    "initial_humans": 1.0,
+    "initial_hardware": 1.0,
+    "initial_capability": 1.0,
+    "initial_power": 1.0,
+    "initial_fabrication": 0.3,
+    "total_land": 1.0,
+    "protected_humans": 1.0,
+    "human_power_per_person": 0.8,
+    "human_land_per_person": 0.8,
+    "human_growth_per_year": 0.012,
+    "human_max_decline_per_year": 0.08,
+    "hardware_power": 0.02,
+    "hardware_land": 0.002,
+    "power_land": 0.05,
+    "fabrication_land": 0.01,
+    "hardware_depreciation": 0.15,
+    "power_depreciation": 0.02,
+    "fabrication_depreciation": 0.08,
+    "hardware_build_energy": 0.02,
+    "power_build_energy": 1.5,
+    "fabrication_build_energy": 0.3,
+    "power_build_chips": 0.05,
+    "fabrication_build_chips": 0.2,
+    "max_replication_per_year": 1.2,
+    "replication_half_capability": 1.0,
+    "power_expansion_per_year": 0.03,
+    "fabrication_expansion_per_year": 0.08,
+    "land_adjustment_years": 1.0,
+    "industrial_activity_scale": 1.0,
+    "operation_budget_fraction": 0.65,
+    "ai_claim_weight": 0.1,
+    "claim_capability_exponent": 1.0,
+    "research_fraction": 0.3,
+    "research_rate": 0.2,
+    "capability_law": "diminishing",
+    "capability_diminishing_scale": 20.0,
+    "capability_ceiling": 100.0,
+    "power_efficiency_exponent": 0.0,
+    "power_efficiency_floor": 0.1,
+    "human_support_half": 0.1,
+    "autonomy_maximum": 1.0,
+    "power_autonomy_scale": 5.0,
+    "fabrication_autonomy_scale": 10.0,
+    "extinction_threshold": 0.001,
+    "marginal_threshold": 0.5,
+    "hardware_persistence_threshold": 0.001
+  },
+  "stress_overrides": {
+    "power_expansion_per_year": 0.06,
+    "fabrication_expansion_per_year": 0.2
+  },
+  "analysis": {
+    "horizon_years": 100.0,
+    "historical_horizon_years": 12000.0,
+    "seed": 2026,
+    "ensemble_samples": 48,
+    "shutdown_failure_probability": 0.1,
+    "compute_cap": 2.0
+  },
+  "uncertainty": {
+    "research_rate": {
+      "lower": 0.05,
+      "upper": 0.4,
+      "scale": "log"
+    },
+    "max_replication_per_year": {
+      "lower": 0.4,
+      "upper": 2.0,
+      "scale": "log"
+    },
+    "power_expansion_per_year": {
+      "lower": 0.015,
+      "upper": 0.1,
+      "scale": "linear"
+    },
+    "fabrication_expansion_per_year": {
+      "lower": 0.03,
+      "upper": 0.4,
+      "scale": "linear"
+    },
+    "hardware_power": {
+      "lower": 0.01,
+      "upper": 0.06,
+      "scale": "log"
+    },
+    "hardware_land": {
+      "lower": 0.001,
+      "upper": 0.006,
+      "scale": "linear"
+    },
+    "power_land": {
+      "lower": 0.03,
+      "upper": 0.08,
+      "scale": "linear"
+    },
+    "power_autonomy_scale": {
+      "lower": 2.0,
+      "upper": 30.0,
+      "scale": "log"
+    },
+    "fabrication_autonomy_scale": {
+      "lower": 3.0,
+      "upper": 50.0,
+      "scale": "log"
+    },
+    "ai_claim_weight": {
+      "lower": 0.03,
+      "upper": 0.3,
+      "scale": "log"
+    },
+    "human_max_decline_per_year": {
+      "lower": 0.04,
+      "upper": 0.12,
+      "scale": "linear"
+    }
+  }
+}

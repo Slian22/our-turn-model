@@ -1,0 +1,83 @@
+{
+  "schema": "our-turn.revised-sources.v1",
+  "version": "2.2.2",
+  "digest": "2cecf3ec1a1754f9bfadfb0763adebaf4dd36bb17232747bdf4356db41033e57",
+  "files": [
+    {
+      "path": "revised/analysis.mjs",
+      "sha256": "cf4969e4baef99fe39d9d84c4b44900fd915d7ca0335ebe712666f1058926a61"
+    },
+    {
+      "path": "revised/assets.mjs",
+      "sha256": "d139648300316f6bb149583859fc4be90b1ab9fc59ae8d89404c05fcf2431932"
+    },
+    {
+      "path": "revised/checkpoint-codec.mjs",
+      "sha256": "39a241a69aed2c03b4b7e4425e68e4e45011244d6422f78fe02c7f3a67097f0f"
+    },
+    {
+      "path": "revised/checkpoint-limits.mjs",
+      "sha256": "500bf4d025ade6e8db96d91b1710b6471262e43cb01ef84997b413d86030bac3"
+    },
+    {
+      "path": "revised/checkpoint.mjs",
+      "sha256": "854fea07117d277f45ad1931bc85872519be75d6c422a24956ea2dc724f86376"
+    },
+    {
+      "path": "revised/config.mjs",
+      "sha256": "956de805efa8955568d08e01df618171d222d4b76b6905a44560b9553c6abe76"
+    },
+    {
+      "path": "revised/dynamics.mjs",
+      "sha256": "abf56a06e8139d7756195fcf6ca5ea086b2efa6932ccde794da637e31a3e522e"
+    },
+    {
+      "path": "revised/engine.mjs",
+      "sha256": "8c3e2038519fda612a076a0aa86fe5f747d9da376f002d7ad021a4cae9776efb"
+    },
+    {
+      "path": "revised/events.mjs",
+      "sha256": "b9d7bb153abdf12a3c228016e820d0cfb64ba6694a0fa52825467807c74f9818"
+    },
+    {
+      "path": "revised/identity.mjs",
+      "sha256": "218057d753170aa7366e7e5625ed08abd0e5b6a0424e68aaf6a57ff42a9fbdbf"
+    },
+    {
+      "path": "revised/infrastructure-config.mjs",
+      "sha256": "9dea5e95edd1e7260563aa6c5cea89014e866af56c9bbaf5adb311091c288467"
+    },
+    {
+      "path": "revised/infrastructure.mjs",
+      "sha256": "4361eae4d14f1e5ced8d3c9798b145ce70b348ff1040a206c0769d5019030944"
+    },
+    {
+      "path": "revised/marginal-priority.mjs",
+      "sha256": "51b4771c523e754a5d2a7297977cf9a96c40320fef434c025a7511e1d9d29fa2"
+    },
+    {
+      "path": "revised/math.mjs",
+      "sha256": "b6e57a58ad9fec14519cc77b437b7bcbbb2b722ffcafd2088ca28749112bcf26"
+    },
+    {
+      "path": "revised/planning.mjs",
+      "sha256": "5c1c874c40ae002e5e7a2687114a608b13d7e59d06bd85f1dfbc9aca0f8510b4"
+    },
+    {
+      "path": "revised/policy.mjs",
+      "sha256": "cc2c0c05d8147b3255b46af19d5c18797aaa2045de75f7e00872f260419e7253"
+    },
+    {
+      "path": "revised/sweep-design.mjs",
+      "sha256": "2d9b2e425a7deef43e875ee728d807c60d89b4c0ac2d43e458eeb3e88e52d1e2"
+    },
+    {
+      "path": "revised/welfare.mjs",
+      "sha256": "a175207c6def5a160757b28fff0a43cfbee1f26cc0b64880ba891016c1d1ddf3"
+    },
+    {
+      "path": "revised/wide-output.mjs",
+      "sha256": "2547bd4af81e77476a6025cdca9f964c7f12418918be4ef9bfd2bc1e12503849"
+    }
+  ]
+}
