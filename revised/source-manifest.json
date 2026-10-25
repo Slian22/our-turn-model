@@ -1,11 +1,11 @@
 {
   "schema": "our-turn.revised-sources.v1",
   "version": "2.2.2",
-  "digest": "2cecf3ec1a1754f9bfadfb0763adebaf4dd36bb17232747bdf4356db41033e57",
+  "digest": "4b6a91523e559e93fbaf362f9263e1001b2b89031aa3824042d2be3d7113d476",
   "files": [
     {
       "path": "revised/analysis.mjs",
-      "sha256": "cf4969e4baef99fe39d9d84c4b44900fd915d7ca0335ebe712666f1058926a61"
+      "sha256": "064c430873f904990b176280afc5aed8dee7a4912d66f1753d0743264a50c245"
     },
     {
       "path": "revised/assets.mjs",
@@ -73,7 +73,7 @@
     },
     {
       "path": "revised/welfare.mjs",
-      "sha256": "a175207c6def5a160757b28fff0a43cfbee1f26cc0b64880ba891016c1d1ddf3"
+      "sha256": "60f019a5ea6fd31ead294369b8e05d762e9004607edf8a93f1bf51232f709955"
     },
     {
       "path": "revised/wide-output.mjs",

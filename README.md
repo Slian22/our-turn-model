@@ -17,7 +17,7 @@ As autonomous artificial intelligence systems scale, their physical operations i
 
 The repository provides two complementary simulation environments:
 - **Core Engine (JavaScript / Node.js ES Modules)**: A discrete-event and continuous dynamical system featuring tri-cohort capital aging, multi-region max-flow spatial transmission networks (7-hex grid), and an interactive browser-based decision platform.
-- **Continuous ODE Model (Pure Python)**: A self-contained ordinary differential equation system solved via SciPy `solve_ivp` (RK45) with marginal resource arbitration and automated unit testing.
+- **Continuous ODE Model (Pure Python)**: A self-contained ordinary differential equation system solved via SciPy `solve_ivp` (LSODA) with proportional resource arbitration and automated unit testing.
 
 ---
 
@@ -68,10 +68,10 @@ The repository provides two complementary simulation environments:
 ### Core Mechanisms
 
 1. **Tri-Cohort Capital Turnover**: Infrastructure is modeled across three distinct capital vintages: Power Generation ($P$, 50-year lifespan / 4-year construction delay), Semiconductor Fabs ($F$, 30-year lifespan / 4-year delay), and Computing Hardware ($H$, 8-year lifespan / 1-year delay). Decommissioned assets enter a mandatory remediation queue recovering 60% of embodied materials.
-2. **Modern Energy Minimum (MEM) Statutory Allocation**: The alignment parameter $\alpha \in [0, 1]$ ring-fences non-negotiable electrical power $R_E(t) = \alpha \cdot e_{\text{MEM}} \max(H(t), H_0)$, where $e_{\text{MEM}} = 1{,}000$\,kWh/person/year.
+2. **Modern Energy Minimum (MEM) Statutory Allocation**: The alignment parameter $\alpha \in [0, 1]$ ring-fences non-negotiable electrical power $R_E(t) = \alpha \cdot e_{\text{MEM}} \max(H(t), H_0)$, where $e_{\text{MEM}} = 1{,}000\text{ kWh/person/year}$.
 3. **Marginal Priority Power Allocation**: Flexible electricity beyond statutory reserves is arbitrated via a smooth logistic marginal priority function:
    $$\sigma(\Delta) = \frac{1}{1 + \exp(-k \Delta)}, \qquad \Delta = \frac{\partial \text{QoL}}{\partial E_H} - \lambda \frac{\partial (\dot{Q}/Q)}{\partial E_{\text{AI}}}$$
-4. **Buffered Demographic Shortfall Dynamics**: Shortfalls in electricity ($s_E$) and land ($s_L$) accumulate into systemic exposure $E_D(t)$ via an inertia ODE ($\tau_D = 2.0$\,yr):
+4. **Buffered Demographic Shortfall Dynamics**: Shortfalls in electricity ($s_E$) and land ($s_L$) accumulate into systemic exposure $E_D(t)$ via an inertia ODE ($\tau_D = 2.0\text{ yr}$):
    $$\frac{dE_D}{dt} = \frac{\max\bigl(0, 1 - \min(s_E, s_L)\bigr) - E_D}{\tau_D}, \qquad \frac{dH}{dt} = H(t)\left[b_0 - \mu_0\bigl(1 + c_E E_D(t)\bigr)\right]$$
 
 ---
@@ -157,7 +157,7 @@ our-turn-model/
 │   ├── marginal-priority.mjs # Marginal allocation logistic function
 │   ├── policy.mjs      # 4-stage regulatory lifecycle & shutdown logic
 │   ├── config.mjs      # Physical & thermodynamic calibrated parameters
-│   └── math.mjs        # Numerical integration routines (Euler / RK-adaptive)
+│   └── math.mjs        # Analytic exponential step & Gauss-Legendre quadrature
 ├── spatial/            # Multi-regional 7-hex spatial network
 │   ├── world.mjs       # Regional simulation engine
 │   ├── allocation.mjs  # Edmonds-Karp max-flow power routing
