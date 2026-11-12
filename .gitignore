@@ -32,7 +32,12 @@ runs/
 *.log
 *.tmp
 *.pdf
-!figure/*.pdf
+*.tex
+*.aux
+*.bbl
+*.blg
+*.out
+*.toc
 .DS_Store
 .DS_Store?
 ._*

@@ -173,8 +173,7 @@ our-turn-model/
 │   ├── revised.html    # Capital cohort & policy control console
 │   └── index.html      # Macro telemetry & counterfactual scenario comparator
 ├── figure/             # System architecture and pipeline diagrams
-│   ├── coupled_architecture.png
-│   └── coupled_architecture.pdf
+│   └── coupled_architecture.png
 ├── revised-tests/      # Engine unit and integration tests
 ├── spatial-tests/      # Spatial max-flow and network consistency tests
 ├── requirements.txt    # Python package dependencies
