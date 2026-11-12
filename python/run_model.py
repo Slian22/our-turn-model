@@ -6,6 +6,7 @@ from dataclasses import asdict, replace
 import json
 from pathlib import Path
 import platform
+import sys
 import textwrap
 
 import matplotlib
@@ -16,11 +17,12 @@ import numpy as np
 import scipy
 from scipy.stats import qmc, spearmanr
 
+HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path:
+    sys.path.insert(0, str(HERE))
+
 from model import (HistoricalParameters, Policy, RSIParameters, Simulation,
                    scenario_from_dict, simulate_history, simulate_rsi)
-
-
-HERE = Path(__file__).resolve().parent
 COLORS = ["#cc4f37", "#df9b34", "#6b77b1", "#238a83", "#204d75"]
 OUTCOMES = ("above_marginal_threshold", "marginal_survival", "extinction_proxy")
 OUTCOME_COLORS = ("#238a83", "#df9b34", "#cc4f37")

@@ -1,14 +1,14 @@
 /**
- * Thomas Continuous 5D ODE Kernel (Browser & Node.js ES Module).
+ * Coupled Continuous 5D ODE Dynamical Kernel (Browser & Node.js ES Module).
  *
- * Implements Thomas's continuous consumer-resource physics with:
+ * Implements continuous consumer-resource physics with:
  * - Infrastructure depreciation (delta_P = 2%/yr, delta_F = 8%/yr)
  * - Explicit repair flows (E_M, C_M)
  * - Tri-resource Leontief expansion bottleneck scaling
  * - Non-singular logistic human carrying capacity
  */
 
-export const DEFAULT_THOMAS_PARAMS = Object.freeze({
+export const DEFAULT_ODE_PARAMS = Object.freeze({
   initial_humans: 1.0,
   initial_hardware: 1.0,
   initial_capability: 1.0,
@@ -34,8 +34,11 @@ export const DEFAULT_THOMAS_PARAMS = Object.freeze({
   hardware_build_energy: 0.02,
   power_build_energy: 1.50,
   fabrication_build_energy: 0.30,
+  hardware_build_chips: 1.0,
   power_build_chips: 0.05,
   fabrication_build_chips: 0.20,
+  reference_capability: 1.0,
+  reference_human_population: 1.0,
 
   max_replication_per_year: 1.20,
   replication_half_capability: 1.0,
@@ -63,17 +66,23 @@ export const DEFAULT_THOMAS_PARAMS = Object.freeze({
   extinction_threshold: 0.001,
   marginal_threshold: 0.50,
   hardware_persistence_threshold: 0.001,
+  tolerance_margin: 1e-8,
+  atol_margin_multiplier: 100.0,
 });
 
-// The same omitted-policy semantics as the original Python Policy dataclass.
-export const DEFAULT_THOMAS_POLICY = Object.freeze({alignment:0,compute_cap:null,
+export const DEFAULT_THOMAS_PARAMS = DEFAULT_ODE_PARAMS;
+
+// The same omitted-policy semantics as the Python Policy dataclass.
+export const DEFAULT_ODE_POLICY = Object.freeze({alignment:0,compute_cap:null,
   cap_start_year:0,shutdown_year:null,shutdown_succeeds:true});
+export const DEFAULT_THOMAS_POLICY = DEFAULT_ODE_POLICY;
+
 const positiveParameters = new Set(['total_land','protected_humans','human_power_per_person','human_land_per_person',
   'human_growth_per_year','human_max_decline_per_year','hardware_power','hardware_land','power_land','fabrication_land',
-  'hardware_build_energy','power_build_energy','fabrication_build_energy','power_build_chips','fabrication_build_chips',
-  'replication_half_capability','land_adjustment_years','industrial_activity_scale','capability_diminishing_scale',
+  'hardware_build_energy','power_build_energy','fabrication_build_energy','hardware_build_chips','power_build_chips','fabrication_build_chips',
+  'reference_capability','reference_human_population','replication_half_capability','land_adjustment_years','industrial_activity_scale','capability_diminishing_scale',
   'capability_ceiling','human_support_half','power_autonomy_scale','fabrication_autonomy_scale','extinction_threshold',
-  'marginal_threshold','hardware_persistence_threshold']);
+  'marginal_threshold','hardware_persistence_threshold','tolerance_margin','atol_margin_multiplier']);
 function finite(value,name,min=0,strict=false) {
   if(typeof value!=='number'||!Number.isFinite(value)||(strict?value<=min:value<min))throw new RangeError(`Invalid finite ${name}`);
 }
@@ -82,8 +91,8 @@ function object(value,name) {
 }
 function parameters(input) {
   object(input,'parameters');
-  if(Object.keys(input).some(key=>!Object.hasOwn(DEFAULT_THOMAS_PARAMS,key)))throw new RangeError('Unknown Thomas parameter');
-  const p={...DEFAULT_THOMAS_PARAMS,...input};
+  if(Object.keys(input).some(key=>!Object.hasOwn(DEFAULT_ODE_PARAMS,key)))throw new RangeError('Unknown ODE model parameter');
+  const p={...DEFAULT_ODE_PARAMS,...input};
   for(const [key,value] of Object.entries(p))if(key!=='capability_law')finite(value,key,0,positiveParameters.has(key));
   for(const key of ['research_fraction','operation_budget_fraction','autonomy_maximum','power_efficiency_floor'])
     if(p[key]>1)throw new RangeError(`Invalid ${key} fraction`);
@@ -97,8 +106,8 @@ function parameters(input) {
 }
 function policyOptions(input) {
   object(input,'policy');
-  if(Object.keys(input).some(key=>!Object.hasOwn(DEFAULT_THOMAS_POLICY,key)))throw new RangeError('Unknown Thomas policy field');
-  const policy={...DEFAULT_THOMAS_POLICY,...input};
+  if(Object.keys(input).some(key=>!Object.hasOwn(DEFAULT_ODE_POLICY,key)))throw new RangeError('Unknown ODE policy field');
+  const policy={...DEFAULT_ODE_POLICY,...input};
   finite(policy.alignment,'policy alignment');if(policy.alignment>1)throw new RangeError('Invalid policy alignment');
   finite(policy.cap_start_year,'policy cap start');
   if(policy.compute_cap!==null)finite(policy.compute_cap,'policy compute cap');
@@ -108,16 +117,17 @@ function policyOptions(input) {
 }
 function validateState(time,state) {
   finite(time,'time');
-  if(!Array.isArray(state)||state.length!==5)throw new TypeError('Expected five Thomas state variables');
+  if(!Array.isArray(state)||state.length!==5)throw new TypeError('Expected five state variables');
   for(const value of state)finite(value,'state');
 }
 
-export function autonomy(capability, scale, p = DEFAULT_THOMAS_PARAMS) {
-  const diff = Math.max(0, capability - 1.0);
+export function autonomy(capability, scale, p = DEFAULT_ODE_PARAMS) {
+  const refCap = p.reference_capability ?? 1.0;
+  const diff = Math.max(0, capability - refCap);
   return p.autonomy_maximum * (1.0 - Math.exp(-diff / scale));
 }
 
-export function occupiedLand(state, p = DEFAULT_THOMAS_PARAMS) {
+export function occupiedLand(state, p = DEFAULT_ODE_PARAMS) {
   const [, hardware, , power, fabrication] = state;
   return p.hardware_land * Math.max(0, hardware) +
          p.power_land * Math.max(0, power) +
@@ -128,16 +138,18 @@ export function limitedFlow(request, energy, chips, energyCost, chipCost) {
   return Math.max(0, Math.min(request, energy / energyCost, chips / chipCost));
 }
 
-export function allocateResourcesThomas(time, state, p = DEFAULT_THOMAS_PARAMS, policy = DEFAULT_THOMAS_POLICY) {
+export function allocateResourcesODE(time, state, p = DEFAULT_ODE_PARAMS, policy = DEFAULT_ODE_POLICY) {
   validateState(time,state);
   const result=allocateUnchecked(time,state,parameters(p),policyOptions(policy));
   for(const value of Object.values(result))finite(value,'allocation');
   return result;
 }
+export const allocateResourcesThomas = allocateResourcesODE;
 
 function allocateUnchecked(time, state, p, policy) {
   let [humans, hardware, capability, power, fabrication] = state.map(v => Math.max(0, v));
-  capability = Math.max(1.0, capability);
+  const refCap = p.reference_capability ?? 1.0;
+  capability = Math.max(refCap, capability);
 
   const h = Math.min(1.0, (humans * (1.0 + p.human_support_half)) / (humans + p.human_support_half));
   const autoP = autonomy(capability, p.power_autonomy_scale, p);
@@ -198,8 +210,9 @@ function allocateUnchecked(time, state, p, policy) {
   const desiredPower = p.power_expansion_per_year * power * supportP * activity;
   const desiredFab = p.fabrication_expansion_per_year * fabrication * supportF * activity;
 
+  const hwChips = p.hardware_build_chips ?? 1.0;
   const energyReq = p.hardware_build_energy * desiredHw + p.power_build_energy * desiredPower + p.fabrication_build_energy * desiredFab;
-  const chipReq = desiredHw + p.power_build_chips * desiredPower + p.fabrication_build_chips * desiredFab;
+  const chipReq = hwChips * desiredHw + p.power_build_chips * desiredPower + p.fabrication_build_chips * desiredFab;
   const landReq = p.hardware_land * desiredHw + p.power_land * desiredPower + p.fabrication_land * desiredFab;
 
   const land = occupiedLand(state, p);
@@ -243,12 +256,13 @@ function allocateUnchecked(time, state, p, policy) {
   };
 }
 
-export function rsiRhsThomas(time, state, p = DEFAULT_THOMAS_PARAMS, policy = DEFAULT_THOMAS_POLICY) {
+export function rsiRhsODE(time, state, p = DEFAULT_ODE_PARAMS, policy = DEFAULT_ODE_POLICY) {
   validateState(time,state);
   const result=rhsUnchecked(time,state,parameters(p),policyOptions(policy));
-  if(result.some(value=>!Number.isFinite(value)))throw new RangeError('Nonfinite Thomas derivative');
+  if(result.some(value=>!Number.isFinite(value)))throw new RangeError('Nonfinite ODE derivative');
   return result;
 }
+export const rsiRhsThomas = rsiRhsODE;
 
 function rhsUnchecked(time, state, p, policy, researchCoordinate = false) {
   const [humans, hardware, capability, power, fabrication] = state.map(v => Math.max(0, v));
@@ -297,10 +311,10 @@ function boundedCapabilityAtDose(capability, dose, ceiling) {
  * Finite-scenario refinement/reference tests do not imply global convergence
  * or empirical validity. Invalid/unstable steps fail explicitly.
  */
-export function simulateThomasTrajectory(p = DEFAULT_THOMAS_PARAMS, policy = DEFAULT_THOMAS_POLICY, horizon = 30.0, dt = 0.05) {
+export function simulateODETrajectory(p = DEFAULT_ODE_PARAMS, policy = DEFAULT_ODE_POLICY, horizon = 30.0, dt = 0.05) {
   p=parameters(p);policy=policyOptions(policy);
   finite(horizon,'horizon',0,true);finite(dt,'dt',0,true);
-  if(!Number.isFinite(horizon/dt)||Math.ceil(horizon/dt)>1_000_000)throw new RangeError('Thomas integration exceeds one million steps');
+  if(!Number.isFinite(horizon/dt)||Math.ceil(horizon/dt)>1_000_000)throw new RangeError('ODE integration exceeds one million steps');
   let state = [p.initial_humans, p.initial_hardware, p.initial_capability, p.initial_power, p.initial_fabrication];
   let t = 0.0;
   const trajectory = [{ t: 0, H: state[0], A: state[1], C: state[2], P: state[3], F: state[4] }];
@@ -315,7 +329,7 @@ export function simulateThomasTrajectory(p = DEFAULT_THOMAS_PARAMS, policy = DEF
    const nSteps=Math.max(1,Math.ceil((right-left)/dt));
    for(let step=0;step<nSteps&&t<right;step++) {
     const next=step===nSteps-1?right:Math.min(right,left+(step+1)*dt),h=next-t;
-    if(!(h>0)||++steps>1_000_002)throw new RangeError('Thomas integration cannot advance at this precision');
+    if(!(h>0)||++steps>1_000_002)throw new RangeError('ODE integration cannot advance at this precision');
 
     const bounded=p.capability_law==='bounded';
     const stage=(rates,interval)=>state.map((v,i)=>bounded&&i===2
@@ -329,7 +343,7 @@ export function simulateThomasTrajectory(p = DEFAULT_THOMAS_PARAMS, policy = DEF
     const increment=k1.map((v,i)=>(h/6)*(v+2*k2[i]+2*k3[i]+k4[i]));
     const updated=state.map((v,i)=>bounded&&i===2
       ? boundedCapabilityAtDose(v,increment[i],p.capability_ceiling) : v+increment[i]);
-    if(updated.some(value=>!Number.isFinite(value)||value< -1e-8))throw new RangeError('Thomas step violates finite/nonnegative state; refine dt');
+    if(updated.some(value=>!Number.isFinite(value)||value< -1e-8))throw new RangeError('ODE step violates finite/nonnegative state; refine dt');
     state=updated.map(value=>Math.max(0,value));
     t=next;
 
@@ -341,3 +355,4 @@ export function simulateThomasTrajectory(p = DEFAULT_THOMAS_PARAMS, policy = DEF
 
   return trajectory;
 }
+export const simulateThomasTrajectory = simulateODETrajectory;

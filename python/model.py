@@ -89,8 +89,11 @@ class RSIParameters:
     hardware_build_energy: float = 0.02
     power_build_energy: float = 1.50
     fabrication_build_energy: float = 0.30
+    hardware_build_chips: float = 1.0
     power_build_chips: float = 0.05
     fabrication_build_chips: float = 0.20
+    reference_capability: float = 1.0
+    reference_human_population: float = 1.0
     max_replication_per_year: float = 1.20
     replication_half_capability: float = 1.0
     power_expansion_per_year: float = 0.03
@@ -114,6 +117,8 @@ class RSIParameters:
     extinction_threshold: float = 0.001
     marginal_threshold: float = 0.50
     hardware_persistence_threshold: float = 0.001
+    tolerance_margin: float = 1e-8
+    atol_margin_multiplier: float = 100.0
 
     def initial_state(self) -> np.ndarray:
         return np.array([
@@ -128,11 +133,12 @@ class RSIParameters:
             "human_land_per_person", "human_growth_per_year", "human_max_decline_per_year",
             "hardware_power", "hardware_land", "power_land", "fabrication_land",
             "hardware_build_energy", "power_build_energy", "fabrication_build_energy",
-            "power_build_chips", "fabrication_build_chips", "replication_half_capability",
+            "hardware_build_chips", "power_build_chips", "fabrication_build_chips",
+            "reference_capability", "reference_human_population", "replication_half_capability",
             "land_adjustment_years", "industrial_activity_scale", "capability_diminishing_scale",
             "capability_ceiling", "human_support_half", "power_autonomy_scale",
             "fabrication_autonomy_scale", "extinction_threshold", "marginal_threshold",
-            "hardware_persistence_threshold",
+            "hardware_persistence_threshold", "tolerance_margin", "atol_margin_multiplier",
         )
         fractions = ("research_fraction", "operation_budget_fraction", "autonomy_maximum")
         for item in fields(self):
@@ -297,7 +303,7 @@ def occupied_land(state: np.ndarray, p: RSIParameters) -> float:
 
 
 def _autonomy(capability: float, scale: float, p: RSIParameters) -> float:
-    return float(p.autonomy_maximum * -np.expm1(-max(capability - 1.0, 0.0) / scale))
+    return float(p.autonomy_maximum * -np.expm1(-max(capability - p.reference_capability, 0.0) / scale))
 
 
 def _limited_flow(request: float, energy: float, chips: float,
@@ -314,7 +320,7 @@ def allocate_resources(time: float, state: np.ndarray, p: RSIParameters, policy:
     requested construction mix are scenario assumptions, not conservation laws.
     """
     humans, hardware, capability, power, fabrication = np.maximum(state, 0.0)
-    capability = max(1.0, capability)
+    capability = max(p.reference_capability, capability)
     h = min(1.0, humans * (1.0 + p.human_support_half) / (humans + p.human_support_half))
     autonomy_p = _autonomy(capability, p.power_autonomy_scale, p)
     autonomy_f = _autonomy(capability, p.fabrication_autonomy_scale, p)
@@ -367,7 +373,7 @@ def allocate_resources(time: float, state: np.ndarray, p: RSIParameters, policy:
         p.fabrication_expansion_per_year * fabrication * support_f * activity,
     ])
     energy_costs = np.array([p.hardware_build_energy, p.power_build_energy, p.fabrication_build_energy])
-    chip_costs = np.array([1.0, p.power_build_chips, p.fabrication_build_chips])
+    chip_costs = np.array([p.hardware_build_chips, p.power_build_chips, p.fabrication_build_chips])
     land_costs = np.array([p.hardware_land, p.power_land, p.fabrication_land])
     depreciation = np.array([p.hardware_depreciation * hardware,
                              p.power_depreciation * power,
@@ -393,7 +399,7 @@ def allocate_resources(time: float, state: np.ndarray, p: RSIParameters, policy:
     human_land = max(0.0, p.total_land - land)
     carrying_capacity = min(human_energy / p.human_power_per_person,
                             human_land / p.human_land_per_person)
-    chips_used = build_hardware + p.power_build_chips * build_power + p.fabrication_build_chips * build_fabrication
+    chips_used = p.hardware_build_chips * build_hardware + p.power_build_chips * build_power + p.fabrication_build_chips * build_fabrication
     land_flow = float(np.dot(land_costs, [build_hardware, build_power, build_fabrication])
                       - np.dot(land_costs, depreciation))
     return {
@@ -432,10 +438,10 @@ def rsi_rhs(time: float, state: np.ndarray, p: RSIParameters, policy: Policy) ->
     ])
 
 
-def _check_nonnegative(values: np.ndarray, atol: float) -> None:
+def _check_nonnegative(values: np.ndarray, atol: float, multiplier: float = 100.0, margin: float = 1e-8) -> None:
     if not np.all(np.isfinite(values)):
         raise RuntimeError("Solver returned a non-finite state.")
-    if values.min() < -max(100 * atol, 1e-8):
+    if values.min() < -max(multiplier * atol, margin):
         raise RuntimeError(f"Solver violated positivity: minimum state {values.min():.3g}.")
 
 
@@ -479,7 +485,7 @@ def simulate_rsi(
         )
         if not solved.success:
             raise RuntimeError(f"RSI integration failed: {solved.message}")
-        _check_nonnegative(solved.y, atol)
+        _check_nonnegative(solved.y, atol, p.atol_margin_multiplier, p.tolerance_margin)
         mask = (times >= left) & (times <= right)
         states[mask] = solved.sol(times[mask]).T
         current = solved.y[:, -1]
@@ -488,7 +494,7 @@ def simulate_rsi(
         nfev += solved.nfev
         for key, values in zip(events, solved.t_events):
             events[key].extend(values.tolist())
-    _check_nonnegative(states, atol)
+    _check_nonnegative(states, atol, p.atol_margin_multiplier, p.tolerance_margin)
     states = np.maximum(states, 0.0)
     for key, level in (("extinction_proxy", p.extinction_threshold), ("marginal", p.marginal_threshold)):
         if p.initial_humans <= level:

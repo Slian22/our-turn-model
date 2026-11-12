@@ -34,8 +34,11 @@
     "hardware_build_energy": 0.02,
     "power_build_energy": 1.5,
     "fabrication_build_energy": 0.3,
+    "hardware_build_chips": 1.0,
     "power_build_chips": 0.05,
     "fabrication_build_chips": 0.2,
+    "reference_capability": 1.0,
+    "reference_human_population": 1.0,
     "max_replication_per_year": 1.2,
     "replication_half_capability": 1.0,
     "power_expansion_per_year": 0.03,
@@ -58,7 +61,9 @@
     "fabrication_autonomy_scale": 10.0,
     "extinction_threshold": 0.001,
     "marginal_threshold": 0.5,
-    "hardware_persistence_threshold": 0.001
+    "hardware_persistence_threshold": 0.001,
+    "tolerance_margin": 1e-8,
+    "atol_margin_multiplier": 100.0
   },
   "stress_overrides": {
     "power_expansion_per_year": 0.06,

@@ -55,9 +55,9 @@ function renderStats(view){
  $('#year').innerHTML=`${number(view.t,view.t%1>1e-6?2:0)} <small>/ ${number(view.horizon)}</small>`;
  $('#time-progress').max=view.horizon;$('#time-progress').value=view.t;
  const finished=view.t>=view.horizon-1e-8;
- $('#turn-description').textContent=`${playing?'Playing':'Paused'} · autoplay +${$('#viewing-pace').value} yr/tick · regional ${SPATIAL_VERSION} · independent Thomas benchmark`;
+ $('#turn-description').textContent=`${playing?'Playing':'Paused'} · autoplay +${$('#viewing-pace').value} yr/tick · regional ${SPATIAL_VERSION} · independent ODE benchmark`;
  for(const id of ['#next-turn','#finish','#play'])$(id).disabled=finished||busy;
- $('#source-pin').textContent=`Regional ${SPATIAL_VERSION} · ${SOURCE_DIGEST.slice(0,16)}… · Thomas independent fixed-default ODE · dt ${BENCHMARK_DT} yr. Save includes the benchmark specification; use the matching source release.`;
+ $('#source-pin').textContent=`Regional ${SPATIAL_VERSION} · ${SOURCE_DIGEST.slice(0,16)}… · Continuous ODE benchmark · dt ${BENCHMARK_DT} yr. Save includes the benchmark specification; use the matching source release.`;
 }
 
 function renderRegion(view){
@@ -137,7 +137,7 @@ function renderChart(view,benchmark){
  $('#baseline-key').innerHTML='<i></i>Without this latest action · same external events';
  const diff=baseline?summarizeWorld(world).H-summarizeWorld(baseline).H:0;
  const diffText = baseline ? ` | ${diff>=0?'+':''}${number(diff,2)}M vs parent` : '';
- $('#comparison-status').innerHTML=`<span style="color:#8ac8ad;">■ 7-Hex Regional</span> vs <span style="color:#f1c40f;">┄ Thomas 0D ODE</span>${diffText}`;
+ $('#comparison-status').innerHTML=`<span style="color:#8ac8ad;">■ 7-Hex Regional</span> vs <span style="color:#f1c40f;">┄ 0D ODE Benchmark</span>${diffText}`;
 }
 
 function eventRows(run=world){return run.regions.flatMap(r=>[
@@ -201,7 +201,7 @@ function advance(stepYears=1){
   // LUI-05: a newer accepted advance supersedes any pending file import.
   loadGeneration++;world=next;baseline=parent;
   const after=worldView(world);
-  announce(`Year ${number(after.t,2)}. ${billion(after.summary.H)} people; lowest regional needs met: ${pct(after.summary.minAdequacy)}. Regional actions do not change the independent Thomas benchmark.`);
+  announce(`Year ${number(after.t,2)}. ${billion(after.summary.H)} people; lowest regional needs met: ${pct(after.summary.minAdequacy)}. Regional actions do not change the independent ODE benchmark.`);
  }finally{busy=false;}
  renderAll();
 }
@@ -227,7 +227,7 @@ function pause(){
  $('#play').textContent='▶ Play';
  $('#play').setAttribute('aria-label','Play simulation');
  $('#play').classList.remove('active');
- $('#turn-description').textContent=`Paused · autoplay +${$('#viewing-pace').value} yr/tick · regional ${SPATIAL_VERSION} · independent Thomas benchmark`;
+ $('#turn-description').textContent=`Paused · autoplay +${$('#viewing-pace').value} yr/tick · regional ${SPATIAL_VERSION} · independent ODE benchmark`;
  $('#map-interval-note').textContent=world.t>0?'Paused · lights and flows show the last physical interval':'Initial stocks · flows unmeasured';
 }
 
@@ -254,7 +254,7 @@ function openAction(type){
  form.elements.type.value=type;form.elements.start.value=String(world.t);form.elements.start.min=String(world.t);
  form.elements.cap.value=String(Math.max(0,Math.round(r.B*.5)));
  $('#action-title').textContent=type==='cap'?'Limit compute':'Attempt shutdown';
- $('#action-region').textContent=`${r.name} · costs are paid from this region's usable electricity. The independent Thomas benchmark receives no regional actions.`;
+ $('#action-region').textContent=`${r.name} · costs are paid from this region's usable electricity. The independent ODE benchmark receives no regional actions.`;
  for(const kind of ['cap','shutdown']){
   const group=$(`#${kind}-fields`);group.hidden=type!==kind;
   for(const input of group.querySelectorAll('input'))input.disabled=group.hidden;
@@ -265,7 +265,7 @@ function branchAction(action){
  const parent=world,next=branchWorld(world,action);
  loadGeneration++;world=next;baseline=parent;
  $('#action-dialog').close();
- announce(`Regional action branch created. Compare it with the same world without this latest action. Thomas remains an independent benchmark.`);
+ announce(`Regional action branch created. Compare it with the same world without this latest action. Continuous ODE remains an independent benchmark.`);
  renderAll();
 }
 function applyAction(event){
@@ -279,7 +279,7 @@ function resetWorld(options){
  pause();const next=createWorld(options);
  loadGeneration++;world=next;baseline=null;selectedId=null;lastView=null;benchmarkCache=null;
  updateZoom(1);$('#event-toast').hidden=true;$('#settings').close();
- announce('New regional world at contact. Thomas uses independent fixed defaults and the same alignment. Advance to measure regional flows.');
+ announce('New regional world at contact. ODE benchmark uses independent fixed defaults and the same alignment. Advance to measure regional flows.');
  renderAll();
 }
 function createScenario(event){
@@ -321,12 +321,12 @@ function restoreBundle(text){
   if(typeof value.world!=='string'||(value.baseline!==null&&typeof value.baseline!=='string'))throw new Error('Invalid comparison checkpoints.');
   next=restoreWorld(value.world);parent=value.baseline===null?null:restoreWorld(value.baseline);validateParent(next,parent);
   if(value.schema==='our-turn.synthesis-ui.v1'&&canonical(value.benchmark)!==canonical(benchmarkSpecification(next)))
-   throw new Error('Saved Thomas specification differs from the current fixed-default benchmark. Use the matching source release.');
+   throw new Error('Saved benchmark specification differs from the current fixed-default benchmark. Use the matching source release.');
   id=String(value.selectedId??'');mode=['adequacy','power','compute'].includes(value.overlay)?value.overlay:'adequacy';
  }else next=restoreWorld(text);
  pause();loadGeneration++;world=next;baseline=parent;selectedId=id;overlay=mode;lastView=null;benchmarkCache=null;
  updateZoom(1);$('#event-toast').hidden=true;renderAll();
- announce(value?.schema==='our-turn.synthesis-ui.v1'?'Comparison restored with its regional parent; Thomas recomputed from the recorded specification.':'Regional world restored; Thomas recomputed using current independent defaults and restored alignment.');
+ announce(value?.schema==='our-turn.synthesis-ui.v1'?'Comparison restored with its regional parent; benchmark recomputed from the recorded specification.':'Regional world restored; benchmark recomputed using current independent defaults and restored alignment.');
 }
 function download(name,text,type='application/json'){
  const url=URL.createObjectURL(new Blob([text],{type})),link=document.createElement('a');

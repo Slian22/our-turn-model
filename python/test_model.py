@@ -1,9 +1,16 @@
 """Physical, analytical and numerical checks; run with python -m unittest -v."""
 
 from dataclasses import replace
+from pathlib import Path
+import sys
 import unittest
 
 import numpy as np
+
+# Ensure local package modules are importable regardless of invocation directory
+_PKG_DIR = Path(__file__).resolve().parent
+if str(_PKG_DIR) not in sys.path:
+    sys.path.insert(0, str(_PKG_DIR))
 
 from model import (HistoricalParameters, RSIParameters, Policy, allocate_resources,
                    consumer_resource_rhs, historical_rhs, occupied_land, rsi_rhs,
